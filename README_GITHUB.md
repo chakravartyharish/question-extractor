@@ -6,7 +6,8 @@
 
 - ✅ **Zero Guessing Guarantee**: AI never guesses answers - only uses PDF-extracted correct answers
 - 📄 **PDF Answer Extraction**: Automatically extracts "Answer (X)" annotations from PDF
-- 🤖 **Claude AI Integration**: Uses Anthropic's Claude to generate detailed explanations
+- 🤖 **Claude AI Integration**: Uses Anthropic's Claude with web search to generate detailed explanations
+- 🔍 **Web Search Enhanced**: Claude uses web search to verify physics concepts and enhance explanations
 - 🔒 **Answer Validation**: Post-processing validation ensures AI doesn't change correct answers
 - 📊 **Cost Tracking**: Real-time token usage and cost estimation
 - 🎯 **Batch Processing**: Process specific question ranges or all questions
@@ -59,10 +60,16 @@ The extractor finds questions and their official answers using regex patterns:
 - Question pattern: `1.\s*In the circuit shown...`
 - Answer pattern: `Answer (3)` → maps to option `C`
 
-### Phase 2: Claude Processing
+### Phase 2: Claude Processing with Web Search
 ```
-Question + PDF Answer → Claude API → Detailed Explanation → Validation → JSON Output
+Question + PDF Answer → Claude API (with web search) → Enhanced Explanation → Validation → JSON Output
 ```
+
+**Web Search Usage:**
+- Claude can search the web to verify physics concepts and formulas
+- Looks up NCERT references and standard values
+- Enhances explanations with up-to-date information
+- Max 3 web searches per question to control costs
 
 **Critical Safeguards:**
 1. **Pre-flight**: Skip questions without PDF answers
