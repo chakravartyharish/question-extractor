@@ -1,0 +1,98 @@
+====================================================================
+NEET QUESTION EXTRACTOR v2.0 - INSTALLATION INSTRUCTIONS
+====================================================================
+
+⚠️ IMPORTANT: Install python-dotenv first!
+
+Since your system uses externally-managed Python, you need to install
+python-dotenv using the system package manager:
+
+--------------------------------------------------------------------
+STEP 1: Install python-dotenv
+--------------------------------------------------------------------
+
+sudo apt update
+sudo apt install python3-dotenv
+
+OR if unavailable:
+
+pip3 install --break-system-packages python-dotenv
+
+--------------------------------------------------------------------
+STEP 2: Verify installation
+--------------------------------------------------------------------
+
+python3 -c "import dotenv; print('✅ python-dotenv installed')"
+
+--------------------------------------------------------------------
+STEP 3: Test the script
+--------------------------------------------------------------------
+
+cd /home/harish/Desktop/NEET2025/question_extractor
+python3 process_questions_v2.py --help
+
+--------------------------------------------------------------------
+STEP 4: Run a dry-run test (no API calls)
+--------------------------------------------------------------------
+
+python3 process_questions_v2.py --dry-run
+
+--------------------------------------------------------------------
+STEP 5: Extract first 5 questions
+--------------------------------------------------------------------
+
+python3 process_questions_v2.py --start-question 1 --end-question 5
+
+--------------------------------------------------------------------
+STEP 6: Full extraction
+--------------------------------------------------------------------
+
+python3 process_questions_v2.py
+
+====================================================================
+TROUBLESHOOTING
+====================================================================
+
+If you get "Module Not Found" errors:
+
+1. Check if modules are installed:
+   python3 -c "import requests, fitz, jsonschema, dotenv; print('All OK')"
+
+2. Install missing modules (system method):
+   sudo apt install python3-requests python3-pymupdf python3-jsonschema python3-dotenv
+
+3. Or use break-system-packages (not recommended):
+   pip3 install --break-system-packages -r requirements.txt
+
+====================================================================
+WHAT'S BEEN IMPROVED
+====================================================================
+
+✅ API Key Security (environment variables)
+✅ Physics Section Detection  
+✅ Exam Instruction Filtering
+✅ Question Quality Validation
+✅ Batch Processing with Resume
+✅ Cost Tracking ($0.50-$1.00 per 10 questions)
+✅ Comprehensive Logging
+✅ Model Upgrade (sonar-reasoning-pro)
+
+====================================================================
+QUICK REFERENCE COMMANDS
+====================================================================
+
+# Test without API costs
+python3 process_questions_v2.py --dry-run
+
+# Extract specific range
+python3 process_questions_v2.py --start-question 10 --end-question 20
+
+# Resume interrupted processing
+python3 process_questions_v2.py --resume
+
+# Full extraction with larger batches
+python3 process_questions_v2.py --batch-size 20
+
+====================================================================
+For detailed documentation, see SETUP.md
+====================================================================

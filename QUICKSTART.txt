@@ -1,0 +1,114 @@
+╔══════════════════════════════════════════════════════════════════╗
+║      NEET 2024 Physics Question Extractor - Quick Start         ║
+╚══════════════════════════════════════════════════════════════════╝
+
+📂 FOLDER STRUCTURE CREATED:
+/home/harish/Desktop/NEET2025/question_extractor/
+├── process_questions.py  (Main script with Perplexity API integration)
+├── requirements.txt      (Python dependencies)
+├── README.md            (Comprehensive documentation)
+└── QUICKSTART.txt       (This file)
+
+✅ REQUIREMENTS CHECK:
+- Python: 3.12.3 ✓
+- PyMuPDF: 1.26.4 ✓
+- requests: 2.31.0 ✓
+- jsonschema: 4.10.3 ✓
+- PDF: /home/harish/Desktop/neet-learning-platform/NEET_2024_Physics.pdf ✓
+
+🚀 TO RUN THE EXTRACTOR:
+
+1. Navigate to the project folder:
+   cd /home/harish/Desktop/NEET2025/question_extractor
+
+2. Run the extraction script:
+   python3 process_questions.py
+
+   OR (since it's executable):
+   ./process_questions.py
+
+3. Wait for processing:
+   - Script will extract questions from PDF
+   - Send each to Perplexity API for structuring
+   - Rate limit: 1 second between calls
+   - Retry: 5 attempts with 5-second delay on failures
+   - Expected time: 1-2 seconds per question
+
+4. Check output:
+   ls -lh neet_2024_physics.json
+   head -n 100 neet_2024_physics.json
+
+📊 WHAT THE SCRIPT DOES:
+
+Step 1: Extract text from PDF using PyMuPDF
+Step 2: Parse questions using regex: r'(\d+)\.\s+(.*?)(?=\d+\.|$)'
+Step 3: Structure each question via Perplexity API
+Step 4: Validate against comprehensive JSON schema
+Step 5: Output to neet_2024_physics.json
+
+📋 OUTPUT SCHEMA INCLUDES:
+
+For each question:
+- id, questionNumber, examInfo (year, type, code)
+- title, questionText, questionImages[]
+- options[] (with A-D, isCorrect, analysis)
+- correctOption, classification (chapter, topic, difficulty, Bloom's)
+- stepByStep[] (solution steps with formulas and insights)
+- quickMethod (shortcuts and time management)
+- solutionImages[]
+
+🔧 CONFIGURATION:
+
+API Key: [REDACTED - See .env.example]
+Model: llama-3.1-sonar-large-128k-online
+Rate Limit: 1.0s between calls
+Error Delay: 5.0s
+Max Retries: 5
+Max Tokens: 2000
+
+⚠️ IMPORTANT NOTES:
+
+- The script includes YOUR complete NEET Questions Database JSON Schema
+- API key is hard-coded as requested (avoid public repos!)
+- Processing is automatic with retry logic
+- Failed questions get fallback minimal structure
+- Schema validation is non-blocking
+- Output includes metadata with timestamps
+
+🆘 TROUBLESHOOTING:
+
+Problem: "401 Unauthorized"
+Solution: Check if Perplexity API key is valid and active
+
+Problem: "429 Too Many Requests"
+Solution: Script has automatic backoff; wait or increase RATE_LIMIT_DELAY
+
+Problem: "PDF not found"
+Solution: Verify: /home/harish/Desktop/neet-learning-platform/NEET_2024_Physics.pdf
+
+Problem: Questions merged incorrectly
+Solution: Adjust regex in process_questions.py (line 200)
+
+Problem: Schema validation fails
+Solution: Review error message; fallback data will be used
+
+📞 NEED HELP?
+
+- Full documentation: README.md
+- Edit configuration: process_questions.py (lines 22-33)
+- Modify schema: process_questions.py (lines 36-198)
+- Adjust prompts: process_questions.py (lines 267-294)
+
+🎯 EXPECTED OUTPUT:
+
+File: neet_2024_physics.json
+Size: 1-5 MB (depends on question count)
+Format: UTF-8 encoded JSON with 2-space indentation
+Metadata: version 1.0, subject Physics, yearRange 2024-2024
+Questions: Array with comprehensive structured data
+
+═══════════════════════════════════════════════════════════════════
+
+Ready to go! Run: python3 process_questions.py
+
+Good luck! 🎓

@@ -1,0 +1,4 @@
+requests>=2.31.0
+PyMuPDF>=1.23.0
+jsonschema>=4.10.0
+python-dotenv>=1.0.0
