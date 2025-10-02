@@ -81,7 +81,7 @@ def call_claude_api(
     }
     
     # Construct prompt that FORCES use of PDF answer
-    user_prompt = f"""You are a NEET Physics question analyzer with access to web search. Your task is to explain the solution, NOT to find the answer.
+    user_prompt = f"""You are a NEET Physics question analyzer. Your task is to explain the solution, NOT to find the answer.
 
 Question {question['number']}: {question['question_text']}
 
@@ -97,18 +97,12 @@ This is Answer ({question['correct_index']}) from the official NEET 2024 answer 
 
 **CRITICAL: The correct answer is {question['correct_answer']}. DO NOT change or question this answer. Your job is to EXPLAIN why it's correct.**
 
-**You can use web search to:**
-- Verify physics concepts and formulas
-- Find standard values, constants, or reference data
-- Look up NCERT chapter references
-- Research best practices for solving similar problems
-
 Your task:
-1. Use web search if needed to enhance your explanation with accurate physics concepts
-2. Provide detailed step-by-step reasoning explaining WHY option {question['correct_answer']} is the correct answer
-3. Explain WHY each of the other options is incorrect
-4. Include relevant physics formulas and calculations with proper units
-5. Use clear, educational language suitable for NEET preparation
+1. Provide detailed step-by-step reasoning explaining WHY option {question['correct_answer']} is the correct answer
+2. Explain WHY each of the other options is incorrect
+3. Include relevant physics formulas and calculations with proper units
+4. Use clear, educational language suitable for NEET preparation
+5. Include NCERT chapter references where applicable
 
 Return ONLY valid JSON matching this structure:
 {{
@@ -187,16 +181,18 @@ REMEMBER: correctOption MUST be "{question['correct_answer']}" - do not change i
         'model': model_config.model_name,
         'max_tokens': model_config.max_tokens,
         'temperature': model_config.temperature,
-        'system': 'You are a NEET Physics expert with web search access. Generate detailed step-by-step solutions explaining the provided correct answer. Use web search to verify physics concepts and enhance explanations. NEVER guess or change the correct answer provided. Your job is to EXPLAIN, not to SOLVE.',
+        'system': 'You are a NEET Physics expert. Generate detailed step-by-step solutions explaining the provided correct answer. NEVER guess or change the correct answer provided. Your job is to EXPLAIN, not to SOLVE.',
         'messages': [{
             'role': 'user',
             'content': user_prompt
-        }],
-        'tools': [{
-            'type': 'web_search_20250305',
-            'name': 'web_search',
-            'max_uses': 3
         }]
+        # Web search disabled to reduce costs (55x token reduction)
+        # Can be re-enabled by uncommenting the tools section below:
+        # 'tools': [{
+        #     'type': 'web_search_20250305',
+        #     'name': 'web_search',
+        #     'max_uses': 3
+        # }]
     }
     
     last_error = None
@@ -219,17 +215,12 @@ REMEMBER: correctOption MUST be "{question['correct_answer']}" - do not change i
             data = response.json()
             
             # Extract content from Claude response
-            # Handle multiple content blocks (text + tool_use)
             content_blocks = data.get('content', [])
             content = ''
             
             for block in content_blocks:
                 if block.get('type') == 'text':
                     content += block.get('text', '')
-                elif block.get('type') == 'tool_use':
-                    # Log tool usage
-                    tool_name = block.get('name', 'unknown')
-                    logger.info(f"  🔍 Tool used: {tool_name}")
             
             # Track token usage
             usage = data.get('usage', {})
